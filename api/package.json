@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "license": "MIT",
   "devDependencies": {
     "tslint": "^6.1.3",
