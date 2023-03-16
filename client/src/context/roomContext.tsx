@@ -1,16 +1,28 @@
-import { createContext, ReactNode, FC } from "react";
+import { createContext, ReactNode, useEffect } from "react";
 import socketIO from "socket.io-client";
 
-type RNode = ReactNode;
-
 const serverURL = "http://localhost:8080";
-const RoomContext = createContext<null | any>(null);
+export const RoomContext = createContext<null | any>(null);
 
 const webSocket = socketIO(serverURL);
 
-export const RoomProvider: FC<{ children: RNode }> = ({
-  children,
-}): JSX.Element => {
+interface RoomId {
+  roomId: string;
+}
+
+interface Children {
+  children: ReactNode;
+}
+
+export const RoomProvider = ({ children }: Children): JSX.Element => {
+  const enterRoom = ({ roomId }: RoomId) => {
+    console.log({ roomId });
+  };
+
+  useEffect(() => {
+    webSocket.on("room-created", enterRoom);
+  }, []);
+
   return (
     <RoomContext.Provider value={{ webSocket }}>
       {children}
