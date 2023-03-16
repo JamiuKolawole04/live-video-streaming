@@ -15,8 +15,11 @@ const io = new socket_io_1.Server(server, {
         methods: ["GET", "POST", "PATCH", "OPTIONS", "PUT", "DELETE"],
     },
 });
-io.on("connection", () => {
+io.on("connection", (socket) => {
     console.log("user is connected");
+    socket.on("disconnect", () => {
+        console.log("user disconnected");
+    });
 });
 server.listen(PORT, () => {
     console.log(`server listening on port ${PORT}`);
