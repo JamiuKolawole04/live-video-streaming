@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const cors_1 = __importDefault(require("cors"));
+const room_1 = require("./room");
 const app = (0, express_1.default)();
 const PORT = 8080;
 const server = http_1.default.createServer(app);
@@ -21,6 +22,8 @@ app.use((0, cors_1.default)({
 }));
 io.on("connection", (socket) => {
     console.log("user is connected");
+    // user joined room handler
+    (0, room_1.roomHandler)(socket);
     socket.on("disconnect", () => {
         console.log("user disconnected");
     });
