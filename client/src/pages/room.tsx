@@ -9,7 +9,7 @@ export const Room = () => {
 
   useEffect(() => {
     webSocket.emit("join-room", { roomId: id });
-  }, []);
+  }, [id, webSocket]);
 
   return <div>Room {id}</div>;
 };
