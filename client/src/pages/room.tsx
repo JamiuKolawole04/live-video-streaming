@@ -5,11 +5,11 @@ import { RoomContext } from "../context/roomContext";
 
 export const Room = () => {
   const { id } = useParams();
-  const { webSocket } = useContext(RoomContext);
+  const { webSocket, me } = useContext(RoomContext);
 
   useEffect(() => {
-    webSocket.emit("join-room", { roomId: id });
-  }, [id, webSocket]);
+    webSocket.emit("join-room", { roomId: id, peerId: me._id });
+  }, [id, webSocket, me._id]);
 
   return <div>Room {id}</div>;
 };
