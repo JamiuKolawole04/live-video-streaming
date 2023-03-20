@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from "react";
-import { Stream } from "stream";
 
 const VideoPlayer: React.FC<{ stream: MediaStream }> = ({ stream }) => {
   const videRef = useRef<HTMLVideoElement>(null);
@@ -8,9 +7,9 @@ const VideoPlayer: React.FC<{ stream: MediaStream }> = ({ stream }) => {
     if (videRef.current) {
       videRef.current.srcObject = stream;
     }
-  }, []);
+  }, [stream]);
 
-  return <video ref={videRef} autoPlay muted={false}></video>;
+  return <video ref={videRef} autoPlay muted={true}></video>;
 };
 
 export default VideoPlayer;
