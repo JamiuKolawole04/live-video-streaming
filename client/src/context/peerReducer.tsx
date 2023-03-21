@@ -1,6 +1,6 @@
 import { ADD_PEER, REMOVE_PEER } from "./peerActions";
 
-type PeerState = Record<string, { stream: MediaStream }>;
+export type PeerState = Record<string, { stream: MediaStream }>;
 
 interface AddPeer {
   type: typeof ADD_PEER;

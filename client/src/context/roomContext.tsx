@@ -10,7 +10,7 @@ import Peer from "peerjs";
 import { v4 as uuidV4 } from "uuid";
 
 import { peersReducer } from "./peerReducer";
-import { addPeerAction } from "./peerActions";
+import { addPeerAction, removePeerAction } from "./peerActions";
 
 const serverURL = "http://localhost:8080";
 export const RoomContext = createContext<null | any>(null);
@@ -30,6 +30,10 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
     console.log({ participants });
   };
 
+  const removePeer = (peerId: string) => {
+    dispatch(removePeerAction(peerId));
+  };
+
   useEffect(() => {
     const meId: string = uuidV4();
     const peer = new Peer(meId);
@@ -46,6 +50,7 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
     }
 
     webSocket.on("get-users", getUsers);
+    webSocket.on("disconnect", removePeer);
   }, []);
 
   useEffect(() => {
@@ -72,7 +77,7 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
   console.log({ peers });
 
   return (
-    <RoomContext.Provider value={{ webSocket, me, stream }}>
+    <RoomContext.Provider value={{ webSocket, me, stream, peers }}>
       {children}
     </RoomContext.Provider>
   );

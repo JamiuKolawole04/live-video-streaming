@@ -3,10 +3,11 @@ import { useParams } from "react-router-dom";
 
 import { RoomContext } from "../context/roomContext";
 import VideoPlayer from "../components/videoPlayer";
+import { PeerState } from "../context/peerReducer";
 
 export const Room = () => {
   const { id } = useParams();
-  const { webSocket, me, stream } = useContext(RoomContext);
+  const { webSocket, me, stream, peers } = useContext(RoomContext);
 
   useEffect(() => {
     webSocket.emit("join-room", { roomId: id, peerId: me?._id });
@@ -16,8 +17,12 @@ export const Room = () => {
     <Fragment>
       <div>Room {id}</div>
 
-      <div>
+      <div className="grid grid-cols-4 gap-4 ">
         <VideoPlayer stream={stream} />
+
+        {Object.values(peers as PeerState).map((peer, i) => (
+          <VideoPlayer stream={peer.stream} key={i} />
+        ))}
       </div>
     </Fragment>
   );
