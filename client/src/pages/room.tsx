@@ -5,7 +5,7 @@ import { RoomContext } from "../context/roomContext";
 import VideoPlayer from "../components/videoPlayer";
 import { PeerState } from "../context/peerReducer";
 
-export const Room = () => {
+export const Room = (): JSX.Element => {
   const { id } = useParams();
   const { webSocket, me, stream, peers } = useContext(RoomContext);
 
