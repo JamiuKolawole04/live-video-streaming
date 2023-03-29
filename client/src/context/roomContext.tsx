@@ -53,6 +53,17 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
     } else {
       navigator.mediaDevices.getDisplayMedia({}).then(switchScreen);
     }
+
+    Object.values(me?.connections).forEach((connection: any) => {
+      const videoTrack = stream
+        ?.getTracks()
+        .find((track) => track.kind === "video");
+
+      connection[0].peerConnection
+        .getSenders()[1]
+        .replaceTrack(videoTrack)
+        .catch((err: any) => console.log(err));
+    });
   };
 
   useEffect(() => {
@@ -61,7 +72,7 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
     setMe(peer);
 
     try {
-      // get display of userr from webcam
+      // get display of user from webcam
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
