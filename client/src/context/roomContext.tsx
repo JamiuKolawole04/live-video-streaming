@@ -25,6 +25,7 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
   const [me, setMe] = useState<Peer>();
   const [stream, setStream] = useState<MediaStream>();
   const [peers, dispatch] = useReducer(peersReducer, {});
+  const [screenSharingId, setScreenSharingId] = useState<string>("");
 
   const getUsers = ({ participants }: { participants: string[] }) => {
     console.log({ participants });
@@ -34,12 +35,33 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
     dispatch(removePeerAction(peerId));
   };
 
+  const switchScreen = (stream: MediaStream) => {
+    setStream(stream);
+    setScreenSharingId(me?.id || "");
+  };
+
+  const shareScreen = () => {
+    // get a stream video from the display of user not from the webcam
+    // navigator.mediaDevices.getDisplayMedia({}).then((stream) => {
+    //   setStream(stream);
+    // });
+
+    if (screenSharingId) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then(switchScreen);
+    } else {
+      navigator.mediaDevices.getDisplayMedia({}).then(switchScreen);
+    }
+  };
+
   useEffect(() => {
     const meId: string = uuidV4();
     const peer = new Peer(meId);
     setMe(peer);
 
     try {
+      // get display of userr from webcam
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })
         .then((stream) => {
@@ -77,7 +99,7 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
   console.log({ peers });
 
   return (
-    <RoomContext.Provider value={{ webSocket, me, stream, peers }}>
+    <RoomContext.Provider value={{ webSocket, me, stream, peers, shareScreen }}>
       {children}
     </RoomContext.Provider>
   );

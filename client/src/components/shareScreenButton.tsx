@@ -1,6 +1,13 @@
-export const ShareScreenButton = (): JSX.Element => {
+export const ShareScreenButton = ({
+  onClick,
+}: {
+  onClick: () => void;
+}): JSX.Element => {
   return (
-    <button className="bg-rose-400 p-4 rounded-lg text-xl hover:bg-rose-600 text-white">
+    <button
+      className="bg-rose-400 p-4 rounded-lg text-xl hover:bg-rose-600 text-white"
+      onClick={onClick}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
