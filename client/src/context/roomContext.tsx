@@ -38,6 +38,17 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
   const switchScreen = (stream: MediaStream) => {
     setStream(stream);
     setScreenSharingId(me?.id || "");
+
+    Object.values(me?.connections).forEach((connection: any) => {
+      const videoTrack = stream
+        ?.getTracks()
+        .find((track) => track.kind === "video");
+
+      connection[0].peerConnection
+        .getSenders()[1]
+        .replaceTrack(videoTrack)
+        .catch((err: any) => console.error(err));
+    });
   };
 
   const shareScreen = () => {
@@ -53,17 +64,6 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
     } else {
       navigator.mediaDevices.getDisplayMedia({}).then(switchScreen);
     }
-
-    Object.values(me?.connections).forEach((connection: any) => {
-      const videoTrack = stream
-        ?.getTracks()
-        .find((track) => track.kind === "video");
-
-      connection[0].peerConnection
-        .getSenders()[1]
-        .replaceTrack(videoTrack)
-        .catch((err: any) => console.log(err));
-    });
   };
 
   useEffect(() => {
