@@ -26,6 +26,7 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
   const [stream, setStream] = useState<MediaStream>();
   const [peers, dispatch] = useReducer(peersReducer, {});
   const [screenSharingId, setScreenSharingId] = useState<string>("");
+  const [roomId, setRoomId] = useState<string>("");
 
   const getUsers = ({ participants }: { participants: string[] }) => {
     console.log({ participants });
@@ -84,14 +85,16 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
 
     webSocket.on("get-users", getUsers);
     webSocket.on("disconnect", removePeer);
-    webSocket.on("user-shared-screen", (peerId) => setScreenSharingId(peerId));
+    webSocket.on("user-started-sharing", (peerId) =>
+      setScreenSharingId(peerId)
+    );
     webSocket.on("user-stopped-sharing", () => setScreenSharingId(""));
 
     return () => {
       webSocket.off("room-created");
       webSocket.off("get-users");
       webSocket.off("user-disconnected");
-      webSocket.off("user-shared-screen");
+      webSocket.off("user-started-sharing");
       webSocket.off("user-stopped-sharing");
       webSocket.off("user-joined");
     };
@@ -118,10 +121,28 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
     });
   }, [me, stream]);
 
+  useEffect(() => {
+    if (screenSharingId) {
+      webSocket.emit("start-sharing", { roomId, peerId: screenSharingId });
+    } else {
+      webSocket.emit("stop-sharing");
+    }
+  }, [screenSharingId, roomId]);
+
   console.log({ peers });
 
   return (
-    <RoomContext.Provider value={{ webSocket, me, stream, peers, shareScreen }}>
+    <RoomContext.Provider
+      value={{
+        webSocket,
+        me,
+        stream,
+        peers,
+        shareScreen,
+        screenSharingId,
+        setRoomId,
+      }}
+    >
       {children}
     </RoomContext.Provider>
   );

@@ -8,11 +8,25 @@ import { ShareScreenButton } from "../components/shareScreenButton";
 
 export const Room = (): JSX.Element => {
   const { id } = useParams();
-  const { webSocket, me, stream, peers, shareScreen } = useContext(RoomContext);
+  const {
+    webSocket,
+    me,
+    stream,
+    peers,
+    shareScreen,
+    screenSharingId,
+    setRoomId,
+  } = useContext(RoomContext);
 
   useEffect(() => {
     webSocket.emit("join-room", { roomId: id, peerId: me?._id });
   }, [id, webSocket, me?._id]);
+
+  console.log({ screenSharingId });
+
+  useEffect(() => {
+    setRoomId(id);
+  }, [id, setRoomId]);
 
   return (
     <Fragment>
