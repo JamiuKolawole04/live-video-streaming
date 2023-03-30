@@ -2,8 +2,8 @@ import { Socket } from "socket.io";
 import { v4 as uuidV4 } from "uuid";
 
 interface IRoomParams {
-  roomId: string;
   peerId: string;
+  roomId: string;
 }
 
 const rooms: Record<string, string[]> = {};
@@ -17,7 +17,7 @@ export const roomHandler = (socket: Socket) => {
     console.log("user create a room");
   };
 
-  const joinRoom = ({ roomId, peerId }: IRoomParams) => {
+  const joinRoom = ({ peerId, roomId }: IRoomParams) => {
     if (rooms[roomId]) {
       console.log("a user joined room", { roomId, peerId });
       if (peerId !== null) {
@@ -48,4 +48,14 @@ export const roomHandler = (socket: Socket) => {
 
   socket.on("join-room", joinRoom);
   socket.on("create-room", createRoom);
+
+  const startSharing = ({ roomId, peerId }: IRoomParams) => {
+    socket.to(roomId).emit("user-started-sharing", peerId);
+  };
+  const stopSharing = (roomId: string) => {
+    socket.to(roomId).emit("user-stop-sharing");
+  };
+
+  socket.on("start-sharing", startSharing);
+  socket.on("stop-sharing", stopSharing);
 };
