@@ -31,6 +31,8 @@ export const Room = (): JSX.Element => {
     setRoomId(id);
   }, [id, setRoomId]);
 
+  const { [screenSharingId]: string, ...peerToShow } = peers;
+
   return (
     <Fragment>
       <div>Room {id}</div>
@@ -41,17 +43,31 @@ export const Room = (): JSX.Element => {
             <VideoPlayer stream={screenSharingVideo} />
           </div>
         )}
+
+        <div
+          className={`grid gap-4 ${
+            screenSharingVideo ? "w-1/5 grid-cols-1" : "grid-cols-4"
+          } `}
+        >
+          {/* stream video with duplicate */}
+          {/* <VideoPlayer stream={stream} /> */}
+
+          {/* stream video without duplicate */}
+          {screenSharingId !== me?.id && <VideoPlayer stream={stream} />}
+
+          {/* peers object */}
+          {/* {Object.values(peers as PeerState).map((peer, i) => (
+            <VideoPlayer stream={peer.stream} key={i} />
+          ))} */}
+
+          {/* destructured peers object */}
+          {Object.values(peerToShow as PeerState).map((peer, i) => (
+            <VideoPlayer stream={peer.stream} key={i} />
+          ))}
+        </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4 ">
-        <VideoPlayer stream={stream} />
-
-        {Object.values(peers as PeerState).map((peer, i) => (
-          <VideoPlayer stream={peer.stream} key={i} />
-        ))}
-      </div>
-
-      <div className="fixed bottom-0 p-6 w-full flex justify-center border-t-2">
+      <div className="fixed bottom-0 p-6 w-full flex justify-center border-t-2 bg-white">
         <ShareScreenButton onClick={shareScreen} />
       </div>
     </Fragment>
