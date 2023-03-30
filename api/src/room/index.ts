@@ -50,10 +50,10 @@ export const roomHandler = (socket: Socket) => {
   socket.on("create-room", createRoom);
 
   const startSharing = ({ roomId, peerId }: IRoomParams) => {
-    socket.to(roomId).emit("user-started-sharing", peerId);
+    socket.to(roomId).emit("user-shared-screen", peerId);
   };
   const stopSharing = (roomId: string) => {
-    socket.to(roomId).emit("user-stop-sharing");
+    socket.to(roomId).emit("user-stopped-sharing");
   };
 
   socket.on("start-sharing", startSharing);

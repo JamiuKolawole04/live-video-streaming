@@ -84,6 +84,17 @@ export const RoomProvider = ({ children }: Children): JSX.Element => {
 
     webSocket.on("get-users", getUsers);
     webSocket.on("disconnect", removePeer);
+    webSocket.on("user-shared-screen", (peerId) => setScreenSharingId(peerId));
+    webSocket.on("user-stopped-sharing", () => setScreenSharingId(""));
+
+    return () => {
+      webSocket.off("room-created");
+      webSocket.off("get-users");
+      webSocket.off("user-disconnected");
+      webSocket.off("user-shared-screen");
+      webSocket.off("user-stopped-sharing");
+      webSocket.off("user-joined");
+    };
   }, []);
 
   useEffect(() => {
