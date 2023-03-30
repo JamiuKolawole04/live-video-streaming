@@ -24,6 +24,9 @@ export const Room = (): JSX.Element => {
 
   console.log({ screenSharingId });
 
+  const screenSharingVideo =
+    screenSharingId === me?.id ? stream : peers[screenSharingId]?.stream;
+
   useEffect(() => {
     setRoomId(id);
   }, [id, setRoomId]);
@@ -31,6 +34,14 @@ export const Room = (): JSX.Element => {
   return (
     <Fragment>
       <div>Room {id}</div>
+
+      <div className="flex">
+        {screenSharingVideo && (
+          <div className="w-4/5 px-4">
+            <VideoPlayer stream={screenSharingVideo} />
+          </div>
+        )}
+      </div>
 
       <div className="grid grid-cols-4 gap-4 ">
         <VideoPlayer stream={stream} />
