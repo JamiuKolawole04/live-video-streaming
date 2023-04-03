@@ -5,6 +5,7 @@ import { RoomContext } from "../context/roomContext";
 import VideoPlayer from "../components/videoPlayer";
 import { PeerState } from "../context/peerReducer";
 import { ShareScreenButton } from "../components/shareScreenButton";
+import { ChatButton } from "../components/chatButton";
 
 export const Room = (): JSX.Element => {
   const { id } = useParams();
@@ -69,6 +70,7 @@ export const Room = (): JSX.Element => {
 
       <div className="fixed bottom-0 p-6 w-full flex justify-center border-t-2 bg-white">
         <ShareScreenButton onClick={shareScreen} />
+        <ChatButton onClick={shareScreen} />
       </div>
     </Fragment>
   );

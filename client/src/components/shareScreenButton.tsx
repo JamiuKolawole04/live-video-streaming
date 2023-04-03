@@ -8,6 +8,7 @@ export const ShareScreenButton = ({
       className="bg-rose-400 p-4 rounded-lg text-xl hover:bg-rose-600 text-white"
       onClick={onClick}
     >
+      {/* heroicons */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
