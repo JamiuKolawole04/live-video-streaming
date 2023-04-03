@@ -5,7 +5,7 @@ export const ChatButton = ({
 }): JSX.Element => {
   return (
     <button
-      className="bg-rose-400 p-4 rounded-lg text-xl hover:bg-rose-600 text-white"
+      className="bg-rose-400 p-4 mx-2 rounded-lg text-xl hover:bg-rose-600 text-white"
       onClick={onClick}
     >
       {/* heroicons */}
